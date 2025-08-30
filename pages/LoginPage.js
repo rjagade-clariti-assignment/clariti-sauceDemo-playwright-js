@@ -2,23 +2,22 @@ import { expect } from '@playwright/test';
 
 export class LoginPage {
   constructor(page) { 
+    
     this.page = page;
-  }
+    this.user = this.page.locator('[data-test="username"], #user-name');
+    this.pass = this.page.locator('[data-test="password"], #password');
+    this.btn  = this.page.locator('[data-test="login-button"], #login-button'); }
 
   async goto() {
     await this.page.goto('/');
   }
 
   async login(username, password) {
-    const user = this.page.locator('[data-test="username"], #user-name');
-    const pass = this.page.locator('[data-test="password"], #password');
-    const btn  = this.page.locator('[data-test="login-button"], #login-button');
+    await this.user.waitFor({ state: 'visible' });
+    await this.user.fill(username);
+    await this.pass.fill(password);
     
-    await user.waitFor({ state: 'visible' });
-    await user.fill(username);
-    await pass.fill(password);
-    
-    await btn.click();
+    await this.btn.click();
 
     await this.expectOnInventory();
   }
