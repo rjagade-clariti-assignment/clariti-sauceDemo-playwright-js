@@ -1,114 +1,114 @@
 # SauceDemo — Playwright (JavaScript)
 
-This repo is a maintainable Playwright suite for Swag Labs. It’s plain **JavaScript (ESM)** with a **Page Object Model** and `.env` config. It implements the four scenarios and stays easy to extend.
-
-## What's covered
-1. **Login** with valid credentials and land on **Products**
-2. **Add two specific products** and verify the cart **badge = 2**
-3. **Checkout** with basic details and reach **“Checkout: Complete!”**
-4. **Sort by Price (low → high)** and verify prices are ascending
+This repository provides a maintainable Playwright test suite for **Swag Labs (SauceDemo)**. It uses plain **JavaScript (ESM)**, follows the **Page Object Model (POM)** design pattern, and supports configuration through `.env`. The suite covers core user flows and is designed to be simple to extend.
 
 ---
 
-## Step‑by‑step guide
+## 🚀 Quick Start
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Install browsers
+npx playwright install
+
+# 3. Run all tests (headless)
+npm test
+
+# 4. View report
+npm run report
+```
+
+---
+
+## Scenarios Covered
+1. **Login** with valid credentials and land on the **Products** page.
+2. **Add two specific products** and verify the cart **badge = 2**.
+3. **Checkout** with basic details and confirm **“Checkout: Complete!”**.
+4. **Sort by Price (low → high)** and validate ascending order of prices.
+
+---
+
+## Step-by-Step Guide
 
 ### 0) Prerequisites
 - **Node.js 18+** (`node -v`)
-- Internet access (tests hit `https://www.saucedemo.com`)
+- Internet connection (tests run against `https://www.saucedemo.com`)
 
-### 1) Get the project
-- Clone or unzip this folder.
-- Open it in your editor/terminal.
+### 1) Get the Project
+- Clone or unzip this repository.
+- Open it in your preferred editor/terminal.
 
-### 2) Install dependencies and browsers
+### 2) Install Dependencies & Browsers
 ```bash
 npm install
 npx playwright install
 ```
-> `npm install` gets packages. `npx playwright install` downloads Chromium/Firefox/WebKit.
+- `npm install` fetches required packages.
+- `npx playwright install` downloads Chromium, Firefox, and WebKit.
 
-### 3) Configure environment (optional)
-Copy the template and adjust if needed:
+### 3) Configure Environment (Optional)
+Copy the template and adjust if necessary:
 ```bash
 cp .env.example .env
 ```
-Defaults are set for SauceDemo:
+Default values:
 ```
 BASE_URL=https://www.saucedemo.com
 SAUCE_USERNAME=standard_user
 SAUCE_PASSWORD=secret_sauce
 ```
-Why `SAUCE_*`? On Windows, `USERNAME` is a built‑in env var (your login). Using `SAUCE_USERNAME` avoids collisions.
+> **Note:** We use `SAUCE_USERNAME` instead of `USERNAME` to avoid conflicts with Windows system variables.
 
-### 4) Run the tests
-- **Headless (CI style)**
+### 4) Run Tests
+- **Headless (CI style):**
   ```bash
   npm test
   ```
-- **Headed (watch the browser)**
+- **Headed (watch browser):**
   ```bash
   npx playwright test --headed
   ```
-- **Visual runner**
+- **Visual runner:**
   ```bash
   npm run test:ui
   ```
 
-### 5) View the report
+### 5) View Reports
 ```bash
 npm run report
 ```
-This opens Playwright’s HTML report. On failure you’ll see links to **trace**, **screenshot**, and **video**.
+This opens Playwright’s HTML report. Failures include links to **trace**, **screenshot**, and **video**.
 
 ### 6) Allure Report
-```bash
-npm run report
-```
-This is a more detailed and interactive report.
 
-####A) Setup (One-time only)
-
-Before you can generate a report, you need two things:
-
-**Install the Allure reporter package:**
-
+#### A) Setup (One-time)
+Install the dependencies:
 ```bash
 npm install -D allure-playwright
-```
-
-**Install the Allure Commandline tool:** This is needed to generate the final HTML report.
-
-```bash
 sudo npm install -g allure-commandline --save-dev
 ```
 
-####B) Generate and View the Report
+#### B) Generate and View Report
+1. **Run tests:**
+   ```bash
+   npx playwright test
+   ```
+   → Creates an `allure-results` folder with raw data.
 
-Generating the report is a two-step process after running your tests.
+2. **Generate report:**
+   ```bash
+   allure generate allure-results -o allure-report --clean
+   ```
 
-**Run your tests:** This will create a folder named allure-results containing the raw test data.
-
-```bash
-npx playwright test
-```
-
-**Generate the report: ** This command reads the raw data from allure-results and builds the HTML report in a new allure-report folder.
-
-```bash
-allure generate allure-results -o allure-report --clean
-
-```
-
-**Open the report: ** This command opens the generated HTML report in your browser.
-
-```bash
-allure open allure-report
-
-```
+3. **Open report:**
+   ```bash
+   allure open allure-report
+   ```
 
 ---
 
-## Project layout
+## Project Layout
 ```
 .
 ├─ pages/                 # Page Objects
@@ -121,11 +121,11 @@ allure open allure-report
 │  ├─ add-to-cart.spec.js
 │  ├─ checkout.spec.js
 │  └─ sort.spec.js
-├─ utils/                 # Test data & small helpers
-│  ├─ testData.js        # product names, checkout info
-│  ├─ assertions.js      # ascending check
-│  └─ env.js             # reads SAUCE_USERNAME/PASSWORD safely
-├─ playwright.config.js   # parallel projects, reporter, timeouts
+├─ utils/                 # Test data & helpers
+│  ├─ testData.js        # Product names, checkout info
+│  ├─ assertions.js      # Assertions (e.g., ascending check)
+│  └─ env.js             # Env variable reader
+├─ playwright.config.js   # Config (parallel, reporter, timeouts)
 ├─ .env.example
 ├─ .editorconfig
 ├─ .gitignore
@@ -134,16 +134,16 @@ allure open allure-report
 
 ---
 
-## Design choices
-- **Thin POM.** Each page exposes only what tests use—no god‑objects.
-- **Stable selectors.** We map Playwright to `data-test` (`testIdAttribute: 'data-test'`), so `getByTestId('username')` hits `data-test="username"`.
-- **No arbitrary waits.** Assertions wait for visible titles, counts, and final states.
-- **Externalized data.** Products and checkout info live in `utils/testData.js`.
-- **Parallel + artifacts.** Runs on Chromium/Firefox/WebKit; failures keep trace, screenshot, and video.
+## Design Choices
+- **Thin POM:** Each page only exposes what tests need.
+- **Stable selectors:** Using `data-test` mapped to Playwright’s `getByTestId`.
+- **No arbitrary waits:** Assertions wait for final visible states.
+- **Externalized test data:** Stored in `utils/testData.js`.
+- **Artifacts:** Failures keep trace, screenshot, and video.
 
 ---
 
-## Run just one test / one browser
+## Running Specific Tests
 - Single spec:
   ```bash
   npx playwright test tests/login.spec.js
@@ -159,8 +159,8 @@ allure open allure-report
 
 ---
 
-## Add a new test quickly
-Create a spec in `tests/`, import page objects, and reuse the env helper:
+## Adding a New Test
+Example:
 ```js
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage.js';
@@ -175,49 +175,47 @@ test('example flow', async ({ page }) => {
   await login.goto();
   await login.login(username, password);
 
-  // your steps + expectations here
+  // additional steps + expectations
 });
 ```
 
 ---
 
-## Configuration notes
-- **`playwright.config.js`** sets:
-  - `use.testIdAttribute = 'data-test'` → `getByTestId()` targets `data-test`
+## Configuration Notes
+- `playwright.config.js`:
+  - `use.testIdAttribute = 'data-test'`
   - Parallel projects (Chromium/Firefox/WebKit)
-  - Traces, screenshots, videos **on failure**
-- **`.env`** values:
-  - `BASE_URL` — defaults to SauceDemo
-  - `SAUCE_USERNAME` / `SAUCE_PASSWORD` — demo creds by default
+  - Traces, screenshots, and videos on failure
+- `.env` values:
+  - `BASE_URL` → SauceDemo by default
+  - `SAUCE_USERNAME` / `SAUCE_PASSWORD` → demo creds
 
-If you insist on `USERNAME`/`PASSWORD`, set `dotenv.config({ override: true })` in `playwright.config.js` so `.env` overrides the OS.
+> To force `.env` override system vars, add `dotenv.config({ override: true })` in `playwright.config.js`.
 
 ---
 
-## What to commit (and what to ignore)
-**Commit:**
+## What to Commit / Ignore
+✅ Commit:
 - `pages/`, `tests/`, `utils/`
 - `playwright.config.js`, `package.json`, `package-lock.json`
 - `.env.example`, `.gitignore`, `.editorconfig`, `README.md`
 
-**Ignore** (already in `.gitignore`):
+🚫 Ignore (already in `.gitignore`):
 - `node_modules/`, `playwright-report/`, `test-results/`, `.env`, `.vs/`
 
 ---
 
 ## Troubleshooting
-- **Timeout waiting for `getByTestId('username')`:**
-  - Ensure the config maps test IDs:
-    ```js
-    use: { testIdAttribute: 'data-test', /* ... */ }
-    ```
+- **Timeout for `getByTestId('username')`:**
+  - Ensure `testIdAttribute` is set.
   - Reinstall browsers: `npx playwright install`
-- **Username field fills with your Windows name instead of `standard_user`:**
-  - Use `SAUCE_USERNAME`/`SAUCE_PASSWORD` in `.env` (already provided), or
-  - `dotenv.config({ override: true })` in `playwright.config.js`
-- **“Browsers not found” / tests won’t launch:**
-  - Run `npx playwright install` again
-- **Report/trace won’t open:**
-  - `npm run report` or `npx playwright show-trace test-results/**/trace.zip`
-- **Behind a proxy/firewall:**
-  - Try `--headed` to verify page loads. Allowlist `saucedemo.com` if blocked.
+- **Username field autofills with Windows login:**
+  - Use `SAUCE_USERNAME`/`SAUCE_PASSWORD`
+  - Or add `dotenv.config({ override: true })`
+- **Browsers not found / tests fail to launch:**
+  - Run `npx playwright install`
+- **Report/trace not opening:**
+  - Run `npm run report` or `npx playwright show-trace test-results/**/trace.zip`
+- **Behind proxy/firewall:**
+  - Use `--headed` mode to verify page loads.
+  - Allowlist `saucedemo.com`.
