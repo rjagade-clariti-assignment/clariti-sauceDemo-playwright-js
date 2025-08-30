@@ -9,7 +9,7 @@ export default defineConfig({
   workers: 4,
   fullyParallel: true,
   retries: 0,
-  reporter: [['html'], ['list']],
+  reporter: [['html'], ['list'], ['allure-playwright',{outputFolder: 'allure-results'}]],
   timeout: 60_000,
   expect: { timeout: 10_000 },
   use: {

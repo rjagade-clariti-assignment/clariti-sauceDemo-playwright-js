@@ -1,4 +1,4 @@
-# Swag Labs (SauceDemo) — Playwright (JavaScript)
+# SauceDemo — Playwright (JavaScript)
 
 This repo is a maintainable Playwright suite for Swag Labs. It’s plain **JavaScript (ESM)** with a **Page Object Model** and `.env` config. It implements the four scenarios and stays easy to extend.
 
@@ -94,10 +94,16 @@ npx playwright test
 
 **Generate the report: ** This command reads the raw data from allure-results and builds the HTML report in a new allure-report folder.
 
+```bash
+allure generate allure-results -o allure-report --clean
+
+```
+
 **Open the report: ** This command opens the generated HTML report in your browser.
 
 ```bash
 allure open allure-report
+
 ```
 
 ---
